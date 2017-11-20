@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
-    //faltatia mejora con ambio de mataña y elegir la provincia mediante un
+    //faltaria mejora con cambio de tamaño y elegir la provincia mediante un
     //edittext el cual compare el nombre escrito con la lista de provincias
     WebView wb;
     Spinner SPprovincias,SPmunicipios;
