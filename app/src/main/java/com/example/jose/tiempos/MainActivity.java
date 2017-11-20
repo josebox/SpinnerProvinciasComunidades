@@ -11,6 +11,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.android.volley.RequestQueue;
@@ -24,7 +25,8 @@ import java.util.Collection;
 import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
-    //probando github
+    //faltatia mejora con ambio de mataña y elegir la provincia mediante un
+    //edittext el cual compare el nombre escrito con la lista de provincias
     WebView wb;
     Spinner SPprovincias,SPmunicipios;
     //me creo otra base de datos
@@ -33,12 +35,15 @@ public class MainActivity extends AppCompatActivity {
     //para posteriormente usarlos para enlazar la pagina web donde obtendremos los datos climatologicos
     int codMunicipio = 0;
     int codProvincia = 0;
+    //boton para que se muestre las comunidades seleccionadas
+    Button btnConf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        wb = (WebView)findViewById(R.id.wb);//donde monstaremos el html
-        //creamos dos spinner que estran relacionados para poder mostrar pro y muni
+        btnConf = (Button)findViewById(R.id.btnConf);
+        wb = (WebView)findViewById(R.id.wb);//donde mostraremos el html
+        //creamos dos spinner que estan relacionados para poder mostrar pro y muni
         SPprovincias = (Spinner)findViewById(R.id.SPprovincias);
         SPmunicipios = (Spinner)findViewById(R.id.SPmunicipios);
         //-------------------BASE DE DATOS------------------------------//
@@ -124,14 +129,14 @@ public class MainActivity extends AppCompatActivity {
         });
         //creamos este metodo para obtener el valor de la opción que tu tocas en el spinner
         SPmunicipios.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            //trabajaremos con el primer metodo que como su nombre id¡ndica es cuando hayamos selecionado algo actuara
+            //trabajaremos con el primer metodo que como su nombre indica es cuando hayamos seleccionado algo actuara
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 codMunicipio = position + 1;
                 //Log.v("POSICION MUNICIPIO", String.valueOf(codMunicipio));
-                //mediante una select elegimos que datos queremos cojer de nuestra bbdd
+                //mediante una select elegimos que datos queremos coger de nuestra bbdd
 
-                lanzarVista(codProvincia,codMunicipio);
+
             }
 
             @Override
@@ -143,7 +148,15 @@ public class MainActivity extends AppCompatActivity {
 
         //-------------------codigo para mostrar el tiempo-------------------------------//
         //lanzarVista(codProvincia,codMunicipio);
+        btnConf.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                lanzarVista(codProvincia,codMunicipio);
+            }
+        });
     }
+
+
 
     private void lanzarVista(int codProvincia, int codMunicipio) {
         RequestQueue rq= Volley.newRequestQueue(this);
@@ -166,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                     filas.add(fila);
                 }
                 String tablaHtml = TablaHtml.generarHtml(titulo, encabezado, filas);
-                //-----------------------------------------------------//
+                //-----------recargamos la pagina----------------------------------//
                 if (Build.VERSION.SDK_INT < 18) {
                     wb.clearView();
                 } else {
@@ -189,8 +202,8 @@ public class MainActivity extends AppCompatActivity {
     private String generarcodigoURL(int codProvincia, int codMunicipio) {
         String auxp= String.valueOf(codProvincia);
         String auxm = String.valueOf(codMunicipio);
-        Log.d("codigoProv",auxp);
-        Log.d("codigoMun",auxm);
+        //Log.d("codigoProv",auxp);
+        //Log.d("codigoMun",auxm);
         String codigoURL;
         if (codProvincia<10){
             auxp=0+auxp;
